@@ -1,7 +1,7 @@
 #### Example payload:
 
 ```javascript
-{"url":"THB_BTC","image_id":1}
+{"url":"https://rovula.com/image.png","image_id":1}
 ```
 
 #### Example cURL:
