@@ -27,6 +27,11 @@ def predict(payload: Payload):
   print(type(payload), payload, 'payload')
 
   img_data = requests.get(payload.url).content
+
+  #   import urllib.request
+  # response = urllib.request.urlopen('https://dx.doi.org/10.3847/1538-4357/aafd31')
+  # html = response.read()
+  
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
 
