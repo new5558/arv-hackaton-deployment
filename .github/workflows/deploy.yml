@@ -61,4 +61,4 @@ jobs:
         run: gcloud info
       # asia-southeast1-c
       - name: Update container of compute engine
-        run: gcloud beta compute instances update-container ${{env.INSTANCE_NAME}} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NANE }}
+        run: gcloud beta compute instances update-container ${{env.INSTANCE_NAME}} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NANE }} --quiet
