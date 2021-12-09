@@ -5,6 +5,7 @@ env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
   INSTANCE_NAME: instance-1
+  CLOUD_ZONE: asia-southeast1-c
   # IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -12,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      # - run: echo ::set-env name=IMAGE_TAG::${GITHUB_REF:10}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -33,13 +32,6 @@ jobs:
         uses: google-github-actions/auth@v0.4.0
         with:
           credentials_json: ${{ secrets.gcp_credentials }}
-
-      # - name: Log in to the Container registry
-      #   uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up docker to authenticate via gcloud command-line tool.
         run: gcloud auth configure-docker ${{ env.REGISTRY }}
@@ -62,6 +54,5 @@ jobs:
 
       - name: Use gcloud CLI
         run: gcloud info
-      # asia-southeast1-c
       - name: Update container of compute engine
-        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --zone ${{ env.CLOUD_ZONE }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
