@@ -8,6 +8,8 @@ COPY requirements.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements.txt
 
+ENV path new5558
+
 EXPOSE 80
 
 COPY . .

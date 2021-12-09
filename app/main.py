@@ -2,12 +2,16 @@ from typing import Optional
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import requests
+import numpy as np
+import cv2
 
 import os
 print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
 
+print(path, 'path')
 
 
 @app.get("/")
@@ -20,9 +24,15 @@ class Payload(BaseModel):
     image_id: str
 @app.post("/"+path+"/predict")
 def predict(payload: Payload):
+  print(type(payload), payload, 'payload')
+
+  img_data = requests.get(payload.url).content
+  arr = np.asarray(bytearray(img_data), dtype=np.uint8)
+  img = cv2.imdecode(arr, -1) # 'Load it as it is'
+
 
   return {
-    "image_id" : payload['image_id'],
+    "image_id" : payload.image_id,
     "bbox_list": [{
         "category_id": 0,
         "bbox": {

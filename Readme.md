@@ -1,17 +1,17 @@
 #### Example payload:
 
 ```javascript
-{"url":"https://rovula.com/image.png","image_id":1}
+{"url":"https://pngquant.org/Ducati_side_shadow.png","image_id":1}
 ```
 
 #### Example cURL:
 
 ```javascript
 curl -X POST \
-  http://localhost/env/predict \
+  http://localhost/new5558/predict \
   -H 'accept: application/json' \
   -H 'content-type: application/json' \
-  -d '{"url":"https://rovula.com/image.png","image_id":1}'
+  -d '{"url":"https://pngquant.org/Ducati_side_shadow.png","image_id":1}'
 ```
 
 #### Response:
