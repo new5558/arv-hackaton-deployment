@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import urllib.request
 import requests
 import numpy as np
 import cv2
@@ -26,11 +27,11 @@ class Payload(BaseModel):
 def predict(payload: Payload):
   print(type(payload), payload, 'payload')
 
-  img_data = requests.get(payload.url).content
+  # img_data = requests.get(payload.url).content
 
-  #   import urllib.request
-  # response = urllib.request.urlopen('https://dx.doi.org/10.3847/1538-4357/aafd31')
-  # html = response.read()
+ 
+  response = urllib.request.urlopen(payload)
+  img_data = response.read()
   
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
   img = cv2.imdecode(arr, -1) # 'Load it as it is'

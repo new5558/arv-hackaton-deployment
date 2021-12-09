@@ -40,7 +40,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+          # images: ${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+          tag-custom-only: true
+          tag-custom: |
+            ${{ github.sha }}
+            latest
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -55,4 +59,4 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
       - name: Update container of compute engine
-        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --zone ${{ env.CLOUD_ZONE }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --zone ${{ env.CLOUD_ZONE }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}:master
