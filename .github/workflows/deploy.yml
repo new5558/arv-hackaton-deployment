@@ -3,7 +3,8 @@ on:
   push:
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
-  ARTIFACT_NANE: arv-hackaton/arv-hackathon
+  ARTIFACT_NANE: arv-hackaton/arv-hackathon/arv-hackathon
+  INSTANCE_NANE: instance-1
   # IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -60,4 +61,4 @@ jobs:
         run: gcloud info
       # asia-southeast1-c
       - name: Update container of compute engine
-        run: gcloud beta compute instances update-container instance-1 --container-image=gcr.io/google-containers/busybox
+        run: gcloud beta compute instances update-container ${{env.INSTANCE_NAME}} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NANE }}
