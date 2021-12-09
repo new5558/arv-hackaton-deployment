@@ -23,6 +23,7 @@ def read_root():
 class Payload(BaseModel):
     url: str
     image_id: str
+
 @app.post("/"+path+"/predict")
 def predict(payload: Payload):
   print(type(payload), payload, 'payload')
@@ -30,7 +31,7 @@ def predict(payload: Payload):
   # img_data = requests.get(payload.url).content
 
  
-  response = urllib.request.urlopen(payload)
+  response = urllib.request.urlopen(payload.url)
   img_data = response.read()
   
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
