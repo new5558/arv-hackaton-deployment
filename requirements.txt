@@ -4,3 +4,10 @@ numpy
 opencv-python-headless
 requests
 torch==1.10.0
+seaborn
+matplotlib
+torchvision
+Image
+pyyaml
+tqdm
+pandas
