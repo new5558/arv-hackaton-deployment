@@ -6,13 +6,27 @@ import urllib.request
 import requests
 import numpy as np
 import cv2
+import torch
 
 import os
 print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
 
 print(path, 'path')
+
+def to_object(array):
+  result_object = {}
+  result_object['category_id'] = array[5]
+  result_object['score'] = array[4]
+  bbox = {}
+  bbox['x'] = array[0]
+  bbox['y'] = array[3]
+  bbox['w'] = array[2] - array[0]
+  bbox['h'] = array[3] - array[1]
+  result_object['bbox'] = bbox
+  return result_object
 
 
 @app.get("/")
@@ -25,29 +39,19 @@ class Payload(BaseModel):
     image_id: str
 
 @app.post("/"+path+"/predict")
-def predict(payload: Payload):
-  print(type(payload), payload, 'payload')
-
-  # img_data = requests.get(payload.url).content
-
- 
+def predict(payload: Payload): 
   response = urllib.request.urlopen(payload.url)
   img_data = response.read()
   
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
 
+  results = model(img, size=320) 
+  result_array = results.pandas().xyxy[0].to_numpy()
+
+  bbox_list = list(map(to_object, result_array))
 
   return {
     "image_id" : payload.image_id,
-    "bbox_list": [{
-        "category_id": 0,
-        "bbox": {
-          "x": 0,
-          "y": 220.66666666666669, 
-          "w": 1050.0986882341442,
-          "h": 525.3333333333333
-          },
-        "score": 0.63508011493555
-      }]
-    }
+    "bbox_list": bbox_list
+  }

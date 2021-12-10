@@ -8,6 +8,11 @@ COPY requirements.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements.txt
 
+RUN pip3 install pandas
+RUN pip3 install Image pyyaml tqdm
+RUN pip3 install torchvision
+RUN pip3 install matplotlib seaborn
+
 ENV path new5558
 
 EXPOSE 80
