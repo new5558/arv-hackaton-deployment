@@ -13,7 +13,7 @@ path = os.environ.get('path')
 app = FastAPI()
 # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
 # loaded = torch.jit.load('./yolov5s.torchscript')
-detector = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2")
+detector = hub.load("./model/task-definition.json")
 
 print(path, 'path')
 
