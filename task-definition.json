@@ -7,11 +7,11 @@
             "environmentFiles": null,
             "logConfiguration": {
                 "logDriver": "awslogs",
+                "secretOptions": null,
                 "options": {
-                    "awslogs-group": "firelens-container",
-                    "awslogs-region": "us-west-2",
-                    "awslogs-create-group": "true",
-                    "awslogs-stream-prefix": "firelens"
+                    "awslogs-group": "/ecs/arv-hackaton",
+                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-stream-prefix": "ecs"
                 }
             },
             "entryPoint": null,
@@ -37,7 +37,7 @@
             "memoryReservation": 30000,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "095355802406.dkr.ecr.ap-southeast-1.amazonaws.com/arv-hackaton:latest",
+            "image": "095355802406.dkr.ecr.ap-southeast-1.amazonaws.com/arv-hackaton:sha-6df3a46",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -64,14 +64,26 @@
         "EXTERNAL",
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:095355802406:task-definition/arv-hackaton:4",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:095355802406:task-definition/arv-hackaton:29",
     "family": "arv-hackaton",
     "requiresAttributes": [
         {
             "targetId": null,
             "targetType": null,
             "value": null,
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
             "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
         },
         {
             "targetId": null,
@@ -87,7 +99,7 @@
     "networkMode": null,
     "runtimePlatform": null,
     "cpu": "10240",
-    "revision": 4,
+    "revision": 29,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
