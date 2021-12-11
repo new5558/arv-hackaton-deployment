@@ -75,4 +75,4 @@ jobs:
           service: arv-hackaton
           cluster: arv-hackaton-intel
           wait-for-service-stability: true
-          # force-new-deployment: true
+          force-new-deployment: true
