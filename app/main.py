@@ -3,30 +3,38 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
 import urllib.request
-import requests
 import numpy as np
 import cv2
-import torch
+import tensorflow_hub as hub
 
 import os
 print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
+# loaded = torch.jit.load('./yolov5s.torchscript')
+detector = hub.load("https://tfhub.dev/tensorflow/faster_rcnn/inception_resnet_v2_640x640/1")
 
 print(path, 'path')
 
-def to_object(array):
-  result_object = {}
-  result_object['category_id'] = array[5]
-  result_object['score'] = array[4]
-  bbox = {}
-  bbox['x'] = array[0]
-  bbox['y'] = array[3]
-  bbox['w'] = array[2] - array[0]
-  bbox['h'] = array[3] - array[1]
-  result_object['bbox'] = bbox
-  return result_object
+def to_object(result):
+  converted_result = []
+  for i in range(len(result['detection_classes'][0])):
+    score = np.array(result['detection_scores'][0]).tolist()[i]
+    if score > 0.5:
+      result_object = {}
+      result_object['category_id'] = np.array(result['detection_classes'][0]).tolist()[i]
+      result_object['score'] = score
+      box = np.array(result['detection_boxes'][0][i]).tolist()
+      bbox = {}
+      bbox['x'] = box[0]
+      bbox['y'] = box[3]
+      bbox['w'] = box[2] - box[0]
+      bbox['h'] = box[3] - box[1]
+      result_object['bbox'] = bbox
+      converted_result.append(result_object)
+  print(converted_result)
+  return converted_result
 
 
 @app.get("/")
@@ -45,11 +53,18 @@ def predict(payload: Payload):
   
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
+  img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-  results = model(img, size=320) 
-  result_array = results.pandas().xyxy[0].to_numpy()
+  detector_output = detector(img[None])
+  # class_ids = detector_output["detection_classes"]
 
-  bbox_list = list(map(to_object, result_array))
+
+  # img_tensor = torch.Tensor(img)
+  # results = loaded(img_tensor) 
+  # print(results, 'results')
+  # result_array = results.pandas().xyxy[0].to_numpy()
+
+  bbox_list = to_object(detector_output)
 
   return {
     "image_id" : payload.image_id,
