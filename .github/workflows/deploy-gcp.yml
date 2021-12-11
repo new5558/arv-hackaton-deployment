@@ -1,7 +1,8 @@
 name: Build & Deploy
 on:
   push:
-  branch: master
+    branches:
+      - master
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
