@@ -6,9 +6,8 @@ on:
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
-  INSTANCE_NAME: instance-1
-  CLOUD_ZONE: asia-southeast1-c
-  # IMAGE_NAME: ${{ github.repository }}
+  CLOUD_ZONE: ap-southeast-1
+  IMAGE_NAME: arv-hackaton
 
 jobs:
   build:
@@ -29,7 +28,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
+          aws-region: ${{ env.CLOUD_ZONE }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -38,26 +37,16 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: my-ecr-repo
+          ECR_REPOSITORY: ${{ env.IMAGE_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
-          flavor: |
-            latest=true
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+#       - name: Extract metadata (tags, labels) for Docker
+#         id: meta
+#         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+#         with:
+#           images: ${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+#           flavor: |
+#             latest=true
