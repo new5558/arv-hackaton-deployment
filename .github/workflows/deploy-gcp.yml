@@ -1,0 +1,61 @@
+name: Build & Deploy
+on:
+  workflow_dispatch:
+    branches:
+      - gcp
+env:
+  REGISTRY: asia-southeast1-docker.pkg.dev
+  ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
+  INSTANCE_NAME: instance-1
+  CLOUD_ZONE: asia-southeast1-c
+  # IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.3.0
+
+      - name: Install gcloud beta version
+        run: yes | gcloud components install beta
+
+      - id: auth
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
+
+      - name: Set up docker to authenticate via gcloud command-line tool.
+        run: gcloud auth configure-docker ${{ env.REGISTRY }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}
+          flavor: |
+            latest=true
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Use gcloud CLI
+        run: gcloud info
+      - name: Update container of compute engine
+        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --zone ${{ env.CLOUD_ZONE }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}:master
