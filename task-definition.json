@@ -98,7 +98,7 @@
     ],
     "networkMode": null,
     "runtimePlatform": null,
-    "cpu": "8192",
+    "cpu": "7192",
     "revision": 34,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
