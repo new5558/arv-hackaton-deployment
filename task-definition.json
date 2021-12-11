@@ -6,10 +6,10 @@
             "dnsSearchDomains": null,
             "environmentFiles": null,
             "logConfiguration": {
-                "LogDriver": "awslogs",
+                "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "firelens-container",
-                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-region": "us-west-2",
                     "awslogs-create-group": "true",
                     "awslogs-stream-prefix": "firelens"
                 }
