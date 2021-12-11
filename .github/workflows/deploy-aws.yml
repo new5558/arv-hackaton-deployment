@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build & Deploy AWS
 on:
   push:
     branches:
@@ -55,9 +55,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      # - run: echo "SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
-
 
       # - name: Render Amazon ECS task definition
       #   id: render-web-container
