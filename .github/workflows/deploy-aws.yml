@@ -71,3 +71,4 @@ jobs:
           task-definition: task-definition.json
           cluster: arv-hackaton
           wait-for-service-stability: true
+          force-new-deployment: true
