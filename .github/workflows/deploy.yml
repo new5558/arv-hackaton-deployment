@@ -1,7 +1,8 @@
 name: Build & Deploy
 on:
   push:
-  branch: master
+    branches:
+      - aws
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
@@ -22,20 +23,26 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.3.0
-
-      - name: Install gcloud beta version
-        run: yes | gcloud components install beta
-
-      - id: auth
-        uses: google-github-actions/auth@v0.4.0
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          credentials_json: ${{ secrets.gcp_credentials }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
 
-      - name: Set up docker to authenticate via gcloud command-line tool.
-        run: gcloud auth configure-docker ${{ env.REGISTRY }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: my-ecr-repo
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -54,8 +61,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Use gcloud CLI
-        run: gcloud info
-      - name: Update container of compute engine
-        run: gcloud beta compute instances update-container ${{ env.INSTANCE_NAME }} --zone ${{ env.CLOUD_ZONE }} --container-image=${{ env.REGISTRY }}/${{ env.ARTIFACT_NAME }}:master
