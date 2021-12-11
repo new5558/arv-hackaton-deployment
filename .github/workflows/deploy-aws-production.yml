@@ -5,7 +5,7 @@ on:
       - master
 env:
   CLOUD_ZONE: ap-southeast-1
-  IMAGE_NAME: arv-hackaton
+  IMAGE_NAME: hackathon-bikini-bottom-19
 
 jobs:
   build:
