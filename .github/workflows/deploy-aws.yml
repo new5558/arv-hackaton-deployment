@@ -63,7 +63,7 @@ jobs:
           task-definition: task-definition.json
           container-name: arv-hackaton
           # image: containous/whoami
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}:${{ steps.meta.sha }}
           # environment-variables: "LOG_LEVEL=info"
 
       - name: Deploy to Amazon ECS
