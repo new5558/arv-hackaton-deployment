@@ -1,6 +1,6 @@
 {
     "ipcMode": null,
-    "executionRoleArn": null,
+    "executionRoleArn": "ecsTaskExecutionRole",
     "containerDefinitions": [
         {
             "dnsSearchDomains": null,
