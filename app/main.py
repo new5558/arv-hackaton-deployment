@@ -13,7 +13,7 @@ path = os.environ.get('path')
 app = FastAPI()
 # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
 # loaded = torch.jit.load('./yolov5s.torchscript')
-# detector = hub.load("./model/task-definition.json")
+detector = hub.load("./model/ssd_mobilenet_v2_2")
 
 print(path, 'path')
 
@@ -48,26 +48,25 @@ class Payload(BaseModel):
 
 @app.post("/"+path+"/predict")
 def predict(payload: Payload): 
-  # response = urllib.request.urlopen(payload.url)
-  # img_data = response.read()
+  response = urllib.request.urlopen(payload.url)
+  img_data = response.read()
   
-  # arr = np.asarray(bytearray(img_data), dtype=np.uint8)
-  # img = cv2.imdecode(arr, -1) # 'Load it as it is'
-  # img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+  arr = np.asarray(bytearray(img_data), dtype=np.uint8)
+  img = cv2.imdecode(arr, -1) # 'Load it as it is'
+  img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-  # detector_output = detector(img[None])
-  # # class_ids = detector_output["detection_classes"]
+  detector_output = detector(img[None])
+  # class_ids = detector_output["detection_classes"]
 
 
-  # # img_tensor = torch.Tensor(img)
-  # # results = loaded(img_tensor) 
-  # # print(results, 'results')
-  # # result_array = results.pandas().xyxy[0].to_numpy()
+  # img_tensor = torch.Tensor(img)
+  # results = loaded(img_tensor) 
+  # print(results, 'results')
+  # result_array = results.pandas().xyxy[0].to_numpy()
 
-  # bbox_list = to_object(detector_output)
+  bbox_list = to_object(detector_output)
 
-  # return {
-  #   "image_id" : payload.image_id,
-  #   "bbox_list": bbox_list
-  # }
-  return "test"
+  return {
+    "image_id" : payload.image_id,
+    "bbox_list": bbox_list
+  }
