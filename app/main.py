@@ -11,8 +11,8 @@ import os
 print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
-# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5s.pt', device='cpu')
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5m', device='cpu')  # default
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5m.pt', device='cpu')
 
 print(path, 'path')
 
