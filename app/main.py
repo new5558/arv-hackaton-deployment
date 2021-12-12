@@ -6,14 +6,16 @@ import urllib.request
 import numpy as np
 import cv2
 import tensorflow_hub as hub
+import tensorflow as tf
 
 import os
 print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
-# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
-# loaded = torch.jit.load('./yolov5s.torchscript')
 detector = hub.load("./model/ssd_mobilenet_v2_2")
+encoder_model =  tf.saved_model.load('./model/autoencoder_model_3_layers_512')
+encoder_infer = encoder_model.signatures['serving_default']
+
 
 print(path, 'path')
 
@@ -55,14 +57,11 @@ def predict(payload: Payload):
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
   img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-  detector_output = detector(img[None])
-  # class_ids = detector_output["detection_classes"]
 
+  x_tensor = tf.cast(tf.constant(img[None]), tf.float32)
+  img_removed_noise = np.array(encoder_infer(x_tensor)['decoder'])
 
-  # img_tensor = torch.Tensor(img)
-  # results = loaded(img_tensor) 
-  # print(results, 'results')
-  # result_array = results.pandas().xyxy[0].to_numpy()
+  detector_output = detector(img_removed_noise)
 
   bbox_list = to_object(detector_output)
 
