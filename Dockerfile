@@ -9,10 +9,10 @@ COPY requirements.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements.txt
 
-RUN apt-get update && apt-get install -y gnupg curl
-RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-RUN apt-get update && apt-get install -y python3-tflite-runtime
+# RUN apt-get update && apt-get install -y curl
+# RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
+# RUN apt-get update && apt-get install -y python3-tflite-runtime
+RUN pip install https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp38-cp38-linux_aarch64.whl
 
 ENV path new5558
 
