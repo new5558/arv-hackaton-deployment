@@ -72,7 +72,7 @@ jobs:
         with:
           # task-definition: ${{ steps.render-web-container.outputs.task-definition }}
           task-definition: task-definition.json
-          service: arv-hackaton
+          service: arv-hackathon
           cluster: arv-hackaton-arm
           wait-for-service-stability: true
           force-new-deployment: true
