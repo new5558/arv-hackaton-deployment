@@ -3,6 +3,8 @@ FROM python:3.8-slim
 WORKDIR app
 
 # RUN apt-get update && DEBIAN_FRONTEND=noninteractive  apt-get install -y python3-pip libgl1-mesa-dev libglib2.0-0
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc
 
 COPY requirements.txt .
 RUN pip3 install --upgrade pip \
