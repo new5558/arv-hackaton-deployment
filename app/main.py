@@ -12,7 +12,7 @@ print(os.environ)
 path = os.environ.get('path')
 app = FastAPI()
 # model = torch.hub.load('ultralytics/yolov5', 'yolov5l', device='cpu')  # default
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5l.pt', device='cpu')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5s.pt', device='cpu')
 
 print(path, 'path')
 
@@ -47,13 +47,15 @@ def predict(payload: Payload):
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
   img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-  results = model(img) 
+  print('run model')
+  results = model(img)
+  print('model results:', results) 
   result_array = results.pandas().xyxy[0].to_numpy()
+  print('model result_array:', result_array) 
 
   bbox_list = list(map(to_object, result_array))
 
   return {
-    "test": "test",
     "image_id" : payload.image_id,
     "bbox_list": bbox_list
   }

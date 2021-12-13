@@ -3,10 +3,10 @@ uvicorn==0.15.0
 numpy
 opencv-python-headless
 requests
-torch==1.10.0
+# torch==1.10.0
 seaborn
 matplotlib
-torchvision
+# torchvision
 Image
 pyyaml
 tqdm
