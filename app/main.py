@@ -53,6 +53,7 @@ def predict(payload: Payload):
   bbox_list = list(map(to_object, result_array))
 
   return {
+    "test": "test",
     "image_id" : payload.image_id,
     "bbox_list": bbox_list
   }
