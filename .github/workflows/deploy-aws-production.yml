@@ -36,7 +36,8 @@ jobs:
         id: docker-push
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: .
+          context: Dockerfile.arm
+          platforms: linux/arm64
           push: true
           tags:  ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}
           cache-from: type=gha

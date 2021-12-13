@@ -49,7 +49,8 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
-          # platforms: linux/arm/v7,linux/amd64,linux/arm64
+          file: Dockerfile.arm
+          platforms: linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -72,7 +73,7 @@ jobs:
         with:
           # task-definition: ${{ steps.render-web-container.outputs.task-definition }}
           task-definition: task-definition.json
-          service: arv-hackaton
-          cluster: arv-hackaton-intel
+          service: arv-hackathon
+          cluster: arv-hackaton-arm
           wait-for-service-stability: true
           force-new-deployment: true
