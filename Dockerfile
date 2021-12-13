@@ -9,6 +9,7 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements.txt
+RUN pip install torch torchvision -f https://torch.kmtea.eu/whl/stable.html
 
 ENV path new5558
 
