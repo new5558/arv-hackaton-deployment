@@ -5,7 +5,7 @@ on:
       is_pytorch:
         required: true
         type: boolean
-        description: 'Specify between pytorch or tflite (Default pytorch)'
+        description: 'Specify between pytorch or tflite (Uncheck is tflite)'
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
