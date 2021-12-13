@@ -34,7 +34,6 @@ def yolo_to_bbox(array):
   result_object['bbox'] = bbox
   return result_object
 
-
 class Model:
     def __init__(self):
         print(bool(is_pytorch), is_pytorch, 'bool(is_pytorch)')
@@ -43,7 +42,7 @@ class Model:
             self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5s.pt', device='cpu')
         else:
             import tflite_runtime.interpreter as tflite
-            interpreter = tflite.Interpreter("./model/ssd_mobilenet_v2_2.tflite")
+            interpreter = tflite.Interpreter("./model/retinanet_resnet50_v1_fpn_640x640_2.tflite")
             my_signature = interpreter.get_signature_runner()
             self.model = my_signature
 
