@@ -6,7 +6,7 @@ WORKDIR app
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc
 
-COPY requirements.txt .
+COPY requirements-arm.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements-arm.txt
 RUN pip install torch torchvision -f https://torch.kmtea.eu/whl/stable.html
