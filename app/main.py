@@ -5,7 +5,8 @@ from pydantic import BaseModel
 import urllib.request
 import numpy as np
 import cv2
-import tensorflow_hub as hub
+# import tensorflow_hub as hub
+import tflite_runtime.interpreter as tflite
 
 import os
 print(os.environ)
@@ -13,7 +14,9 @@ path = os.environ.get('path')
 app = FastAPI()
 # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', device='cpu')  # default
 # loaded = torch.jit.load('./yolov5s.torchscript')
-detector = hub.load("./model/ssd_mobilenet_v2_2")
+# detector = hub.load("./model/ssd_mobilenet_v2_2")
+interpreter = tflite.Interpreter("./model/ssd_mobilenet_v2_2.tflite")
+my_signature = interpreter.get_signature_runner()
 
 print(path, 'path')
 
@@ -55,7 +58,8 @@ def predict(payload: Payload):
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
   img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-  detector_output = detector(img[None])
+  # detector_output = detector(img[None])
+  detector_output = my_signature(input_tensor=img[None])
   # class_ids = detector_output["detection_classes"]
 
 

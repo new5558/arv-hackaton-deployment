@@ -11,5 +11,5 @@ requests
 # pyyaml
 # tqdm
 # pandas
-tensorflow
-tensorflow_hub
+# tensorflow
+# tensorflow_hub
