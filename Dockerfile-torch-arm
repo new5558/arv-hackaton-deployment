@@ -1,4 +1,4 @@
-FROM jasonrandrews/pytorch
+FROM jasonrandrews/pytorch-dev
 
 WORKDIR app
 
