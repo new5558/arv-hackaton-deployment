@@ -6,7 +6,7 @@ requests
 # torch==1.10.0
 seaborn
 matplotlib
-# torchvision
+torchvision
 Image
 pyyaml
 tqdm

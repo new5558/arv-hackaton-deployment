@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM jasonrandrews/pytorch
 
 WORKDIR app
 
@@ -9,7 +9,7 @@ RUN apt-get update \
 COPY requirements-torch-arm.txt .
 RUN pip3 install --upgrade pip \
     && pip3 install -r requirements-torch-arm.txt
-RUN pip install torch torchvision -f https://torch.kmtea.eu/whl/stable.html
+# RUN pip install torch torchvision -f https://torch.kmtea.eu/whl/stable.html
 
 ENV path new5558
 ENV is_pytorch True
