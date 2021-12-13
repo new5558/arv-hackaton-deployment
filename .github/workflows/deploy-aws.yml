@@ -52,7 +52,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
-          file: ${{ github.event.inputs.is_pytorch && 'Dockerfile-arm-torch' && 'DOckerfile-arm-tflite' }}
+          file: ${{ github.event.inputs.is_pytorch && 'Dockerfile-arm-torch' || 'Dockerfile-arm-tflite' }}
           platforms: linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
