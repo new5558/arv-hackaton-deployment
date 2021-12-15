@@ -6,13 +6,13 @@ is_pytorch = ast.literal_eval(os.environ.get('is_pytorch').title())
 
 def tflite_to_bbox(result):
   converted_result = []
-  for i in range(len(result['detection_classes'][0])):
-    score = np.array(result['detection_scores'][0]).tolist()[i]
+  for i in range(len(result['output_2'][0])): # detection classes
+    score = result['output_1'][0].tolist()[i] # dection socre
     if score > 0.5:
       result_object = {}
-      result_object['category_id'] = np.array(result['detection_classes'][0]).tolist()[i]
+      result_object['category_id'] = result['output_2'][0].tolist()[i] + 1
       result_object['score'] = score
-      box = np.array(result['detection_boxes'][0][i]).tolist()
+      box = result['output_3'][0][i].tolist() # dection boxes
       bbox = {}
       bbox['x'] = box[0]
       bbox['y'] = box[3]
@@ -43,7 +43,7 @@ class Model:
             self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5s.pt', device='cpu')
         else:
             import tflite_runtime.interpreter as tflite
-            interpreter = tflite.Interpreter("./model/ssd_mobilenet_v2_2.tflite")
+            interpreter = tflite.Interpreter("./model/efficientdet-lite-real-augment-50.tflite")
             my_signature = interpreter.get_signature_runner()
             self.model = my_signature
 
@@ -54,7 +54,7 @@ class Model:
             bbox_list = list(map(yolo_to_bbox, result_array))
             return bbox_list
         else:
-           detector_output = self.model(input_tensor=img[None])
+           detector_output = self.model(images=img[None])
            bbox_list = tflite_to_bbox(detector_output)
            return bbox_list
            

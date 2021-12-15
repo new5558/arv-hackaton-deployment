@@ -14,10 +14,10 @@ RUN pip install torch torchvision -f https://torch.kmtea.eu/whl/stable.html
 ENV path new5558
 ENV is_pytorch True
 
-EXPOSE 80
+EXPOSE 8000
 
 COPY . .
 
 RUN python3 app/load_model.py
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
