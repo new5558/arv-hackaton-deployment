@@ -43,7 +43,7 @@ class Model:
             self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/yolov5s.pt', device='cpu')
         else:
             import tflite_runtime.interpreter as tflite
-            interpreter = tflite.Interpreter("./model/efficientdet-lite-real-augment-50.tflite")
+            interpreter = tflite.Interpreter("./model/efficientdet-lite-real-augment-50-3.tflite")
             my_signature = interpreter.get_signature_runner()
             self.model = my_signature
 

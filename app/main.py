@@ -31,7 +31,7 @@ def predict(payload: Payload):
   arr = np.asarray(bytearray(img_data), dtype=np.uint8)
   img = cv2.imdecode(arr, -1) # 'Load it as it is'
   img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-  img = cv2.resize(img, (320, 320))
+  img = cv2.resize(img, (512, 512))
 
   bbox_list = model.predict(img)
 
