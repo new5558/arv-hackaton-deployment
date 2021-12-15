@@ -10,7 +10,8 @@ def tflite_to_bbox(result):
     score = result['output_1'][0].tolist()[i] # dection socre
     if score > 0:
       result_object = {}
-      result_object['category_id'] = int(result['output_2'][0].tolist()[i] + 1)
+      category_id = int(result['output_2'][0].tolist()[i] + 1)
+      result_object['category_id'] = category_id if category_id <= 4 else 4
       result_object['score'] = score
       box = result['output_3'][0][i].tolist() # dection boxes
       bbox = {}
