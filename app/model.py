@@ -8,7 +8,7 @@ def tflite_to_bbox(result):
   converted_result = []
   for i in range(len(result['output_2'][0])): # detection classes
     score = result['output_1'][0].tolist()[i] # dection socre
-    if score > 0.5:
+    if score > 0:
       result_object = {}
       result_object['category_id'] = int(result['output_2'][0].tolist()[i] + 1)
       result_object['score'] = score
