@@ -19,7 +19,7 @@
                 {
                     "hostPort": 80,
                     "protocol": "tcp",
-                    "containerPort": 80
+                    "containerPort": 8000
                 }
             ],
             "command": null,
@@ -64,7 +64,7 @@
         "EXTERNAL",
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:095355802406:task-definition/arv-hackaton:34",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:095355802406:task-definition/arv-hackaton:56",
     "family": "arv-hackaton",
     "requiresAttributes": [
         {
@@ -98,8 +98,8 @@
     ],
     "networkMode": null,
     "runtimePlatform": null,
-    "cpu": "7192",
-    "revision": 34,
+    "cpu": "10240",
+    "revision": 56,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

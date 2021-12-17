@@ -1,8 +1,11 @@
 name: Build & Deploy AWS
 on:
   workflow_dispatch:
-    branches:
-      - aws
+    inputs:
+      is_pytorch:
+        required: true
+        type: boolean
+        description: 'Specify between pytorch or tflite (Uncheck is tflite)'
 env:
   REGISTRY: asia-southeast1-docker.pkg.dev
   ARTIFACT_NAME: arv-hackaton/arv-hackathon/arv-hackathon
@@ -49,7 +52,8 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
-          # platforms: linux/arm/v7,linux/amd64,linux/arm64
+          file: ${{ (github.event.inputs.is_pytorch == 'true' && 'Dockerfile-torch-arm') || 'Dockerfile-tflite-arm' }}
+          platforms: linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -72,7 +76,7 @@ jobs:
         with:
           # task-definition: ${{ steps.render-web-container.outputs.task-definition }}
           task-definition: task-definition.json
-          service: arv-hackaton
-          cluster: arv-hackaton-intel
+          service: arv-hackathon
+          cluster: arv-hackaton-arm
           wait-for-service-stability: true
-          # force-new-deployment: true
+          force-new-deployment: true
